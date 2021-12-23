@@ -10,6 +10,7 @@ import java.util.Scanner;
 import org.json.JSONArray;
 
 import lol.foxxy.idfkwasbored.ansitools.AnsiUtils;
+import lol.foxxy.idfkwasbored.util.EnvVarUtil;
 import lol.foxxy.idfkwasbored.util.NetUtil;
 import lol.foxxy.idfkwasbored.util.StorageUtil;
 import oshi.SystemInfo;
@@ -20,37 +21,48 @@ import oshi.hardware.HardwareAbstractionLayer;
 
 public class Main {
 	public static int i = 0;
-	public static HashMap<String, String> iToKey = new HashMap<String, String>();
 	public static String title = "  ██████▓██   ██▓  ██████  █    ██ ▄▄▄█████▓ ██▓ ██▓    \r\n"
-			+ "▒██    ▒ ▒██  ██▒▒██    ▒  ██  ▓██▒▓  ██▒ ▓▒▓██▒▓██▒    \r\n"
-			+ "░ ▓██▄    ▒██ ██░░ ▓██▄   ▓██  ▒██░▒ ▓██░ ▒░▒██▒▒██░    \r\n"
-			+ "  ▒   ██▒ ░ ▐██▓░  ▒   ██▒▓▓█  ░██░░ ▓██▓ ░ ░██░▒██░    \r\n"
-			+ "▒██████▒▒ ░ ██▒▓░▒██████▒▒▒▒█████▓   ▒██▒ ░ ░██░░██████▒\r\n"
-			+ "▒ ▒▓▒ ▒ ░  ██▒▒▒ ▒ ▒▓▒ ▒ ░░▒▓▒ ▒ ▒   ▒ ░░   ░▓  ░ ▒░▓  ░\r\n"
-			+ "░ ░▒  ░ ░▓██ ░▒░ ░ ░▒  ░ ░░░▒░ ░ ░     ░     ▒ ░░ ░ ▒  ░\r\n"
-			+ "░  ░  ░  ▒ ▒ ░░  ░  ░  ░   ░░░ ░ ░   ░       ▒ ░  ░ ░   \r\n"
-			+ "      ░  ░ ░           ░     ░               ░      ░  ░\r\n"
-			+ "         ░ ░                                            ";
+								+ "▒██    ▒ ▒██  ██▒▒██    ▒  ██  ▓██▒▓  ██▒ ▓▒▓██▒▓██▒    \r\n"
+								+ "░ ▓██▄    ▒██ ██░░ ▓██▄   ▓██  ▒██░▒ ▓██░ ▒░▒██▒▒██░    \r\n"
+								+ "  ▒   ██▒ ░ ▐██▓░  ▒   ██▒▓▓█  ░██░░ ▓██▓ ░ ░██░▒██░    \r\n"
+								+ "▒██████▒▒ ░ ██▒▓░▒██████▒▒▒▒█████▓   ▒██▒ ░ ░██░░██████▒\r\n"
+								+ "▒ ▒▓▒ ▒ ░  ██▒▒▒ ▒ ▒▓▒ ▒ ░░▒▓▒ ▒ ▒   ▒ ░░   ░▓  ░ ▒░▓  ░\r\n"
+								+ "░ ░▒  ░ ░▓██ ░▒░ ░ ░▒  ░ ░░░▒░ ░ ░     ░     ▒ ░░ ░ ▒  ░\r\n"
+								+ "░  ░  ░  ▒ ▒ ░░  ░  ░  ░   ░░░ ░ ░   ░       ▒ ░  ░ ░   \r\n"
+								+ "      ░  ░ ░           ░     ░               ░      ░  ░\r\n"
+								+ "         ░ ░                                            ";
 	public static AnsiUtils colors = new AnsiUtils();
 
 	public static void main(String[] args) throws Exception {
 		while (true) {
+			i = 0;
+			// clear the screen
 			new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+			// print the title
 			System.out.println(colors.getRed() + title + colors.reset());
 			System.out.println();
 			System.out.println();
+			// get the oshi systeminfo object
 			SystemInfo systemInfo = new SystemInfo();
-	        InetAddress localhost = InetAddress.getLocalHost();
-			String hostname = systemInfo.getOperatingSystem().getNetworkParams().getHostName();
+			// grab the localhost addr
+			InetAddress localhost = InetAddress.getLocalHost();
+			// get the computer's hostname & ip
 			String localIP = localhost.getLocalHost().toString().trim();
+			// get the HAL object
 			HardwareAbstractionLayer hardware = systemInfo.getHardware();
+			// grab processor info
 			CentralProcessor processor = hardware.getProcessor();
+			// grab gpu info for all gpus
 			List<GraphicsCard> graphicscard = hardware.getGraphicsCards();
+			// grab the memory info
 			GlobalMemory memory = hardware.getMemory();
-
+			
+			// print the cpu info
 			System.out.println(colors.getRed() + "[+] " + colors.reset() + "CPU: " + processor.toString());
 			System.out.println();
+			// check the gpu amount
 			if (graphicscard.size() > 1) {
+				// if larger than one, print info for all of them.
 				graphicscard.forEach((K) -> {
 					System.out.println(
 							colors.getRed() + "[+] " + colors.reset() + "GPU: " + graphicscard.get(Main.i).getName()
@@ -61,19 +73,23 @@ public class Main {
 					++Main.i;
 				});
 			} else if (graphicscard.size() == 1) {
+				// if its equal to one, then print info for the single gpu
 				System.out.println(colors.getRed() + "[+] " + colors.reset() + "GPU: " + graphicscard.get(0).getName()
 						+ "\n Device ID: " + graphicscard.get(0).getDeviceId() + "\n Vendor: "
 						+ graphicscard.get(0).getVendor() + "\n VRAM: " + graphicscard.get(0).getVRam()
 						+ "\n Driver Version: " + graphicscard.get(0).getVersionInfo() + "\n");
 
 			}
+			// get the ram in bytes, then convert it to a human-readable format, then print it
 			System.out.println(colors.getRed() + "[+] " + colors.reset() + "RAM: "
 					+ StorageUtil.humanReadableByteCountBin(memory.getTotal()) + " (" + memory.getTotal() + " bytes)");
 			System.out.println();
-			System.out.println(colors.getRed() + "[+] " + colors.reset() + "Network: " + localIP + "\n MAC Address: " + NetUtil.getMacAddr());
+			// print out the hostname, ip, and mac address
+			System.out.println(colors.getRed() + "[+] " + colors.reset() + "Network: " + localIP + "\n MAC Address: "
+					+ NetUtil.getMacAddr());
+			// print the selectable options
 			System.out.println(
-					colors.getRed() + "1" + colors.reset() + ") " + colors.reset() + "Enviroment Variable Getter"
-			);
+					colors.getRed() + "1" + colors.reset() + ") " + colors.reset() + "Enviroment Variable Getter");
 			System.out.println(
 					colors.getRed() + "2" + colors.reset() + ") " + colors.reset() + "Get WiFi Passwords"
 			);
@@ -81,61 +97,33 @@ public class Main {
 					colors.getRed() + "3" + colors.reset() + ") " + colors.reset() + "Exit"
 			);
 			System.out.println();
+			// create a scanner to read an input line
 			Scanner sc = new Scanner(System.in);
+			// give the user an option selection prompt
 			System.out.print(colors.getRed() + "[/] " + colors.reset() + "Select an option: ");
+			// read the next line
 			String str = sc.nextLine();
+			// check what option the user selected
 			if (str.contains("1")) {
-				doEnvVarGetter();
+				// enviroment variable getter
+				EnvVarUtil.doEnvVarGetter();
 
 			} else if (str.contains("3")) {
+				// exit
 				System.exit(0);
-			}  else if (str.contains("2")) {
+			} else if (str.contains("2")) {
+				// grab the wifi passwords
 				NetUtil.getWifiPasswords();
 			} else {
+				// alert the user that they made an invalid selection
 				System.out.println(colors.getRed() + "[!] " + colors.reset() + "Invalid Selection! Please try again.");
 				Thread.sleep(3000);
 			}
+			// clear the screen after the selection was made
 			new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
 		}
 
 	}
 
-	public static void doEnvVarGetter() throws InterruptedException, IOException {
-		new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-		Main.i = 1;
-		System.out.println(colors.getRed() + "[/] " + colors.reset() + "Enviroment Variable Getter");
-		System.getenv().forEach((K, V) -> {
-			System.out.println(colors.getRed() + String.valueOf(i) + colors.reset() + ") " + colors.reset() + K);
-			Main.iToKey.put(String.valueOf(i), K);
-			++Main.i;
-		});
-		Scanner sc = new Scanner(System.in);
-		System.out.print(colors.getRed() + "[/] " + colors.reset() + "What would you like to read the value of? ");
-		while (sc.hasNextLine()) {
-			String str = sc.nextLine();
-			if (!iToKey.get(str).contains("Path")) {
-				System.out.println(System.getenv().get(iToKey.get(str)));
-			} else {
-				System.out.println(colors.getRed() + "[+] " + colors.reset()
-						+ "Attempt to retrieve PATH detected, prettyprinting...");
-				JSONArray obj = new JSONArray();
-				Arrays.asList(System.getenv("PATH").split(";")).forEach(K -> {
-					obj.put(K);
-				});
-				System.out.println(obj.toString(2).replace("[", colors.getRed() + "[" + colors.reset())
-						.replace("]", colors.getRed() + "]" + colors.reset())
-						.replace("\"", colors.getRed() + "\"" + colors.reset())
-						.replace(",", colors.getWhite() + "," + colors.reset()));
-			}
-			break;
 
-		}
-		sc = new Scanner(System.in);
-		System.out.print(colors.getRed() + "[/] " + colors.reset() + "Press enter to continue... ");
-		while (sc.hasNextLine()) {
-			return;
-
-		}
-
-	}
 }
