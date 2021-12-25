@@ -108,7 +108,7 @@ public class Main {
 			// create a scanner to read an input line
 			Scanner sc = new Scanner(System.in);
 			// give the user an option selection prompt
-			System.out.print(colors.getRed() + "[/] " + colors.reset() + username + colors.getRed() + "@" + "sysutil> ");
+			System.out.print(colors.getRed() + "[/] " + colors.reset() + username + colors.getRed() + "@" + colors.reset()+ "sysutil> ");
 			// read the next line
 			String str = sc.nextLine();
 			// check what option the user selected
