@@ -11,6 +11,7 @@ import org.json.JSONArray;
 
 import lol.foxxy.idfkwasbored.ansitools.AnsiUtils;
 import lol.foxxy.idfkwasbored.util.EnvVarUtil;
+import lol.foxxy.idfkwasbored.util.KeyUtil;
 import lol.foxxy.idfkwasbored.util.NetUtil;
 import lol.foxxy.idfkwasbored.util.StorageUtil;
 import oshi.SystemInfo;
@@ -86,7 +87,7 @@ public class Main {
 			System.out.println();
 			// print out the hostname, ip, and mac address
 			System.out.println(colors.getRed() + "[+] " + colors.reset() + "Network: " + localIP + "\n MAC Address: "
-					+ NetUtil.getMacAddr());
+					+ NetUtil.getMacAddr() + "\n Public IP: " + NetUtil.getIPV4());
 			// print the selectable options
 			System.out.println(
 					colors.getRed() + "1" + colors.reset() + ") " + colors.reset() + "Enviroment Variable Getter");
@@ -94,13 +95,19 @@ public class Main {
 					colors.getRed() + "2" + colors.reset() + ") " + colors.reset() + "Get WiFi Passwords"
 			);
 			System.out.println(
-					colors.getRed() + "3" + colors.reset() + ") " + colors.reset() + "Exit"
+					colors.getRed() + "3" + colors.reset() + ") " + colors.reset() + "Get Windows License Key"
+			);
+			System.out.println(
+					colors.getRed() + "4" + colors.reset() + ") " + colors.reset() + "Retrieve Geolocation Data via IP address"
+			);
+			System.out.println(
+					colors.getRed() + "5" + colors.reset() + ") " + colors.reset() + "Exit"
 			);
 			System.out.println();
 			// create a scanner to read an input line
 			Scanner sc = new Scanner(System.in);
 			// give the user an option selection prompt
-			System.out.print(colors.getRed() + "[/] " + colors.reset() + "Select an option: ");
+			System.out.print(colors.getRed() + "[/] " + colors.reset() + "systutil> ");
 			// read the next line
 			String str = sc.nextLine();
 			// check what option the user selected
@@ -108,12 +115,17 @@ public class Main {
 				// enviroment variable getter
 				EnvVarUtil.doEnvVarGetter();
 
-			} else if (str.contains("3")) {
+			} else if (str.contains("5")) {
 				// exit
 				System.exit(0);
+			} else if (str.contains("4")) {
+				NetUtil.getGeoLocationDataIPV4();
 			} else if (str.contains("2")) {
 				// grab the wifi passwords
 				NetUtil.getWifiPasswords();
+			} else if (str.contains("3")) {
+				// grab the wifi passwords
+				KeyUtil.getProductKey();
 			} else {
 				// alert the user that they made an invalid selection
 				System.out.println(colors.getRed() + "[!] " + colors.reset() + "Invalid Selection! Please try again.");

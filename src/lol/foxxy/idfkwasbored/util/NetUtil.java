@@ -1,18 +1,17 @@
 package lol.foxxy.idfkwasbored.util;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
 
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import lol.foxxy.idfkwasbored.ansitools.AnsiUtils;
 
@@ -40,6 +39,7 @@ public class NetUtil {
 		// make a temp file
 		Path temp = Files.createTempFile("netshOut", ".file");
 		// output all networks on the computer to the temp file
+		System.out.println(colors.getRed() + "[+] " + colors.reset() + "Getting all installed networks.");
 		new ProcessBuilder("cmd", "/c", "netsh wlan show profile > " + temp.toString().replace("\\\\", "\\"))
 				.inheritIO().start().waitFor();
 		// make a list of all the lines that the above command outputted
@@ -48,17 +48,20 @@ public class NetUtil {
 		ArrayList<String> ssids = new ArrayList<String>();
 		// the hashmap that will contain the final result
 		HashMap<String /* ssid */, String /* password */> end = new HashMap<String, String>();
-		
+
 		// loop over the lines in the text file
 		for (String s : lines) {
-			// check if the line contains the splitter that netsh uses to differentiate a key from a value 
+			// check if the line contains the splitter that netsh uses to differentiate a
+			// key from a value
 			if (s.contains(": ")) {
 				// split it and add the end to the ssids list
 				ssids.add(s.split(": ")[1].strip());
 			}
 		}
 		// loop over the ssids
+
 		for (String s : ssids) {
+			System.out.println(colors.getRed() + "[+] " + colors.reset() + "Grabbing the password for: " + s);
 			// create a new temp file
 			temp = Files.createTempFile("netshOut", ".file");
 			// create a new netsh process, this time to get the password
@@ -79,7 +82,8 @@ public class NetUtil {
 		// get the current app path
 		Path currentRelativePath = Paths.get("");
 		String currPath = currentRelativePath.toAbsolutePath().toString();
-		// write the end list that contains the ssids and passwords to a file by converting it to json
+		// write the end list that contains the ssids and passwords to a file by
+		// converting it to json
 		Files.writeString(Paths.get(currPath + "\\wifi.json"), new JSONObject(end).toString(2));
 		// pretty print it
 		System.out.println(new JSONObject(end).toString(2).replace("]", colors.getRed() + "]" + colors.reset())
@@ -93,7 +97,34 @@ public class NetUtil {
 		System.out.print(colors.getRed() + "[/] " + colors.reset() + "Press enter to continue... ");
 		while (sc.hasNextLine()) {
 			return;
-
 		}
+	}
+
+	public static void getGeoLocationDataIPV4() throws Exception{
+		AnsiUtils colors = new AnsiUtils();
+		URL geodb = new URL("http://geolocation-db.com/json/");
+		JSONTokener tokener = new JSONTokener(geodb.openStream());
+		JSONObject obj = new JSONObject(tokener);
+		System.out.println(colors.getRed() + "[+] " + colors.reset() + "Country: " + obj.getString("country_name"));
+		System.out.println(colors.getRed() + "[+] " + colors.reset() + "State: " + obj.getString("state"));
+		System.out.println(colors.getRed() + "[+] " + colors.reset() + "City: " + obj.getString("city"));
+		System.out.println(colors.getRed() + "[+] " + colors.reset() + "Postal Code: " + obj.getString("postal"));
+		System.out.println(colors.getRed() + "[+] " + colors.reset() + "Latitude: " + obj.getDouble("latitude"));
+		System.out.println(colors.getRed() + "[+] " + colors.reset() + "Longitude: " + obj.getDouble("longitude"));
+		System.out.println();
+		System.out.println(colors.getRed() + "[/] " + colors.reset() + "This information is a ballpark, and may not be pinpoint accurate.");
+		System.out.println();
+		Scanner sc = new Scanner(System.in);
+		System.out.print(colors.getRed() + "[/] " + colors.reset() + "Press enter to continue... ");
+		while (sc.hasNextLine()) {
+			return;
+		}
+	}
+	public static String getIPV4() throws Exception{
+		AnsiUtils colors = new AnsiUtils();
+		URL geodb = new URL("http://geolocation-db.com/json/");
+		JSONTokener tokener = new JSONTokener(geodb.openStream());
+		JSONObject obj = new JSONObject(tokener);
+		return obj.getString("IPv4");
 	}
 }
