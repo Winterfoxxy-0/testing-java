@@ -28,7 +28,7 @@
 							<archive>
 								<manifest>
 									<mainClass>
-										App
+										Main
 									</mainClass>
 								</manifest>
 							</archive>
