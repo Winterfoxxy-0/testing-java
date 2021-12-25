@@ -1,5 +1,6 @@
 package lol.foxxy.idfkwasbored;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Arrays;
@@ -57,7 +58,7 @@ public class Main {
 			List<GraphicsCard> graphicscard = hardware.getGraphicsCards();
 			// grab the memory info
 			GlobalMemory memory = hardware.getMemory();
-			
+			String username = System.getProperty("user.name");
 			// print the cpu info
 			System.out.println(colors.getRed() + "[+] " + colors.reset() + "CPU: " + processor.toString());
 			System.out.println();
@@ -107,7 +108,7 @@ public class Main {
 			// create a scanner to read an input line
 			Scanner sc = new Scanner(System.in);
 			// give the user an option selection prompt
-			System.out.print(colors.getRed() + "[/] " + colors.reset() + "systutil> ");
+			System.out.print(colors.getRed() + "[/] " + colors.reset() + username + colors.getRed() + "@" + "sysutil> ");
 			// read the next line
 			String str = sc.nextLine();
 			// check what option the user selected
