@@ -1,14 +1,8 @@
 package lol.foxxy.idfkwasbored;
 
-import java.awt.Color;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-
-import org.json.JSONArray;
 
 import lol.foxxy.idfkwasbored.ansitools.AnsiUtils;
 import lol.foxxy.idfkwasbored.util.EnvVarUtil;
@@ -20,6 +14,7 @@ import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
 import oshi.hardware.GraphicsCard;
 import oshi.hardware.HardwareAbstractionLayer;
+import oshi.software.os.OperatingSystem;
 
 public class Main {
 	public static int i = 0;
@@ -58,7 +53,10 @@ public class Main {
 			List<GraphicsCard> graphicscard = hardware.getGraphicsCards();
 			// grab the memory info
 			GlobalMemory memory = hardware.getMemory();
+	        OperatingSystem operatingSystem = systemInfo.getOperatingSystem();
 			String username = System.getProperty("user.name");
+			System.out.println(colors.getRed() + "[+] " + colors.reset() + "OS: " + operatingSystem.toString());
+			System.out.println();
 			// print the cpu info
 			System.out.println(colors.getRed() + "[+] " + colors.reset() + "CPU: " + processor.toString());
 			System.out.println();
