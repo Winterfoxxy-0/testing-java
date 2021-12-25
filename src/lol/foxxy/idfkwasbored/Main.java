@@ -68,7 +68,7 @@ public class Main {
 							colors.getRed() + "[+] " + colors.reset() + "GPU: " + graphicscard.get(Main.i).getName()
 									+ "\n Device ID: " + graphicscard.get(Main.i).getDeviceId() + "\n Vendor: "
 									+ graphicscard.get(Main.i).getVendor() + "\n VRAM: "
-									+ graphicscard.get(Main.i).getVRam() + "\n Driver Version: "
+									+ StorageUtil.humanReadableByteCountBin(graphicscard.get(Main.i).getVRam()) + "\n Driver Version: "
 									+ graphicscard.get(Main.i).getVersionInfo().replace("DriverVersion=", "") + "\n");
 					++Main.i;
 				});
@@ -76,7 +76,7 @@ public class Main {
 				// if its equal to one, then print info for the single gpu
 				System.out.println(colors.getRed() + "[+] " + colors.reset() + "GPU: " + graphicscard.get(0).getName()
 						+ "\n Device ID: " + graphicscard.get(0).getDeviceId() + "\n Vendor: "
-						+ graphicscard.get(0).getVendor() + "\n VRAM: " + graphicscard.get(0).getVRam()
+						+ graphicscard.get(0).getVendor() + "\n VRAM: " + StorageUtil.humanReadableByteCountBin(graphicscard.get(0).getVRam())
 						+ "\n Driver Version: " + graphicscard.get(0).getVersionInfo() + "\n");
 
 			}
