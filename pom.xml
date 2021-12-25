@@ -27,9 +27,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>
-										Main
-									</mainClass>
+									<mainClass>lol.foxxy.idfkwasbored.Main</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
